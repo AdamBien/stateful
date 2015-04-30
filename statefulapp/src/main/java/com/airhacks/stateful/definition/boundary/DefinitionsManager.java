@@ -9,8 +9,9 @@ import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.xml.stream.XMLStreamException;
+import org.apache.commons.scxml2.SCXMLExecutor;
 import org.apache.commons.scxml2.io.SCXMLWriter;
-import org.apache.commons.scxml2.model.SCXML;
+import org.apache.commons.scxml2.model.ModelException;
 
 /**
  *
@@ -23,7 +24,7 @@ public class DefinitionsManager {
     DefinitionStore ds;
 
     public String create(String stateMachineId, InputStream stream) {
-        this.ds.createStateMachine(stateMachineId, stream);
+        this.ds.store(stateMachineId, stream);
         return stateMachineId;
     }
 
@@ -43,12 +44,25 @@ public class DefinitionsManager {
     }
 
     public void dump(String stateMachineId, OutputStream output) {
-        SCXML scxml = this.ds.find(stateMachineId);
+        SCXMLExecutor executor = this.ds.find(stateMachineId);
+        if (executor == null) {
+            return;
+        }
         try {
-            SCXMLWriter.write(scxml, output);
+            SCXMLWriter.write(executor.getStateMachine(), output);
         } catch (IOException | XMLStreamException ex) {
             throw new IllegalStateException("Cannot serialize state", ex);
         }
+    }
+
+    public void remove(String stateMachineId) {
+        SCXMLExecutor executor = this.ds.find(stateMachineId);
+        try {
+            executor.reset();
+        } catch (ModelException ex) {
+            throw new IllegalStateException("Cannot reset executor for: " + stateMachineId, ex);
+        }
+        this.ds.remove(stateMachineId);
     }
 
 }

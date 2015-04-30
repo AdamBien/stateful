@@ -20,14 +20,14 @@ import org.apache.commons.scxml2.model.SCXML;
 @Singleton
 public class DefinitionStore {
 
-    private ConcurrentMap<String, SCXML> stateMachines;
+    private ConcurrentMap<String, SCXMLExecutor> stateMachines;
 
     @PostConstruct
     public void init() {
         this.stateMachines = new ConcurrentHashMap<>();
     }
 
-    public SCXML createStateMachine(String stateMachineId, InputStream stream) {
+    public SCXML store(String stateMachineId, InputStream stream) {
         SCXML scxml = null;
         try {
             scxml = SCXMLReader.read(stream);
@@ -45,11 +45,11 @@ public class DefinitionStore {
         } catch (ModelException e) {
             throw new RuntimeException("Cannot start executor with state machine id: " + stateMachineId, e);
         }
-        this.stateMachines.put(stateMachineId, scxml);
+        this.stateMachines.put(stateMachineId, executor);
         return scxml;
     }
 
-    public SCXML get(String stateMachineId) {
+    public SCXMLExecutor get(String stateMachineId) {
         return this.stateMachines.get(stateMachineId);
     }
 
@@ -65,7 +65,7 @@ public class DefinitionStore {
         return this.stateMachines.keySet();
     }
 
-    public SCXML find(String stateMachineId) {
+    public SCXMLExecutor find(String stateMachineId) {
         return this.stateMachines.get(stateMachineId);
     }
 

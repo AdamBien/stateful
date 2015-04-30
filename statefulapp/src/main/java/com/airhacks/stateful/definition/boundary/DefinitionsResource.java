@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -64,6 +65,12 @@ public class DefinitionsResource {
         return (output) -> {
             dm.dump(stateMachineId, output);
         };
+    }
+
+    @DELETE
+    @Path("{stateMachineId}")
+    public void remove(@PathParam("stateMachineId") String stateMachineId) {
+        dm.remove(stateMachineId);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.airhacks.stateful.definition.control;
 
-import com.airhacks.stateful.definition.control.DefinitionStore;
 import java.io.InputStream;
+import org.apache.commons.scxml2.SCXMLExecutor;
 import org.apache.commons.scxml2.model.SCXML;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
@@ -30,13 +30,15 @@ public class DefinitionStoreTest {
     public void crudStateMachine() throws Exception {
         final String slot = "test";
         InputStream stream = this.getClass().getResourceAsStream("/state.xml");
-        SCXML created = this.cut.createStateMachine(slot, stream);
+        SCXML created = this.cut.store(slot, stream);
         assertNotNull(created);
         assertTrue(this.cut.exists(slot));
-        SCXML fetched = this.cut.get(slot);
+        SCXMLExecutor fetched = this.cut.get(slot);
         assertThat(fetched, is(created));
+        assertTrue(fetched.isRunning());
 
         this.cut.remove(slot);
+        assertFalse(fetched.isRunning());
 
         assertFalse(this.cut.exists(slot));
         assertNull(this.cut.get(slot));
