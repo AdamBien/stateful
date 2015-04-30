@@ -37,6 +37,13 @@ public class DefinitionsResourceIT {
         response = definitionTarget.request().get();
         assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
 
+        response = builder.target(location).request().delete();
+        assertNotNull(response);
+        assertThat(response.getStatus(), is(204));
+
+        response = definitionTarget.request().get();
+        assertThat(response.getStatus(), is(204));
+
     }
 
 }
