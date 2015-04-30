@@ -1,0 +1,22 @@
+<scxml xmlns="http://www.w3.org/2005/07/scxml"
+       version="1.0"
+       initial="indexpage">
+
+    <state id="indexpage">
+        <transition event="login"   target="authenticated"/>
+    </state>
+
+    <state id="authenticated">
+        <transition event="browse"   target="browsing"/>
+        <transition event="logout"    target="unauthenticated"/>
+    </state>
+
+    <state id="browsing">
+        <transition event="logout" target="unauthenticated"/>
+    </state>
+
+    <state id="unauthenticated">
+        <transition event="authenticate"   target="indexpage"/>
+    </state>
+
+</scxml>
