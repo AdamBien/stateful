@@ -65,4 +65,8 @@ public class DefinitionStore {
         return this.stateMachines.keySet();
     }
 
+    public SCXML find(String stateMachineId) {
+        return this.stateMachines.get(stateMachineId);
+    }
+
 }

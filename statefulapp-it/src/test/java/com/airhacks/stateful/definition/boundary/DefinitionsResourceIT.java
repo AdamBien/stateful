@@ -33,6 +33,10 @@ public class DefinitionsResourceIT {
         String location = response.getHeaderString("Location");
         assertNotNull(location);
 
+        WebTarget definitionTarget = builder.target(location);
+        response = definitionTarget.request().get();
+        assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
+
     }
 
 }

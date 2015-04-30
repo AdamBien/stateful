@@ -1,11 +1,16 @@
 package com.airhacks.stateful.definition.boundary;
 
 import com.airhacks.stateful.definition.control.DefinitionStore;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Set;
 import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.xml.stream.XMLStreamException;
+import org.apache.commons.scxml2.io.SCXMLWriter;
+import org.apache.commons.scxml2.model.SCXML;
 
 /**
  *
@@ -35,6 +40,15 @@ public class DefinitionsManager {
 
     public Set<String> stateMachineNames() {
         return this.ds.stateMachineNames();
+    }
+
+    public void dump(String stateMachineId, OutputStream output) {
+        SCXML scxml = this.ds.find(stateMachineId);
+        try {
+            SCXMLWriter.write(scxml, output);
+        } catch (IOException | XMLStreamException ex) {
+            throw new IllegalStateException("Cannot serialize state", ex);
+        }
     }
 
 }
