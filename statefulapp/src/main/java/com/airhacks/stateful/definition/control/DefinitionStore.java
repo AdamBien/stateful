@@ -4,6 +4,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import javax.annotation.PostConstruct;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Singleton;
 import org.apache.commons.scxml2.SCXMLExecutor;
 
@@ -12,6 +14,7 @@ import org.apache.commons.scxml2.SCXMLExecutor;
  * @author airhacks.com
  */
 @Singleton
+@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class DefinitionStore {
 
     private ConcurrentMap<String, SCXMLExecutor> stateMachines;

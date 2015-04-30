@@ -61,10 +61,15 @@ public class DefinitionsResource {
 
     @GET
     @Path("{stateMachineId}")
-    public StreamingOutput get(@PathParam("stateMachineId") String stateMachineId) {
-        return (output) -> {
+    public Response get(@PathParam("stateMachineId") String stateMachineId) {
+        if (!this.dm.exists(stateMachineId)) {
+            return Response.noContent().build();
+        }
+        StreamingOutput so = (output) -> {
             dm.dump(stateMachineId, output);
         };
+
+        return Response.ok(so).build();
     }
 
     @DELETE
