@@ -43,6 +43,27 @@ public class DefinitionsResourceIT {
 
         response = definitionTarget.request().get();
         assertThat(response.getStatus(), is(204));
+    }
+
+    @Test
+    public void put() {
+        String key = "duke_" + System.nanoTime();
+        WebTarget tut = builder.target();
+
+        InputStream stream = this.getClass().getResourceAsStream("/state.xml");
+        Response response = tut.path(key).request().put(Entity.entity(stream, MediaType.WILDCARD_TYPE));
+        assertThat(response.getStatus(), is(201));
+        String location = response.getHeaderString("Location");
+        assertNotNull(location);
+
+        WebTarget definitionTarget = builder.target(location);
+        response = definitionTarget.request().get();
+        assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
+
+        //update
+        stream = this.getClass().getResourceAsStream("/state.xml");
+        response = definitionTarget.request().put(Entity.entity(stream, MediaType.WILDCARD_TYPE));
+        assertThat(response.getStatus(), is(200));
 
     }
 

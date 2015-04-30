@@ -32,13 +32,10 @@ public class DefinitionsResource {
     @PUT
     @Path("{stateMachineId}")
     public Response define(@PathParam("stateMachineId") String stateMachineId, InputStream stream, @Context UriInfo info) {
-        boolean created = false;
-        if (this.dm.exists(stateMachineId)) {
-            created = false;
-        }
-        String id = this.dm.create(stateMachineId, stream);
+        boolean created = !this.dm.exists(stateMachineId);
+        this.dm.create(stateMachineId, stream);
         if (created) {
-            URI uri = info.getAbsolutePathBuilder().path("/" + id).build();
+            URI uri = info.getAbsolutePathBuilder().build();
             return Response.created(uri).build();
         } else {
             return Response.ok().build();
