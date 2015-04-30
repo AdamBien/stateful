@@ -10,8 +10,10 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.xml.stream.XMLStreamException;
 import org.apache.commons.scxml2.SCXMLExecutor;
+import org.apache.commons.scxml2.io.SCXMLReader;
 import org.apache.commons.scxml2.io.SCXMLWriter;
 import org.apache.commons.scxml2.model.ModelException;
+import org.apache.commons.scxml2.model.SCXML;
 
 /**
  *
@@ -24,8 +26,30 @@ public class DefinitionsManager {
     DefinitionStore ds;
 
     public String create(String stateMachineId, InputStream stream) {
-        this.ds.store(stateMachineId, stream);
+        SCXMLExecutor executor = createAndStart(stateMachineId, stream);
+        this.ds.store(stateMachineId, executor);
         return stateMachineId;
+    }
+
+    SCXMLExecutor createAndStart(String stateMachineId, InputStream stream) {
+        SCXML scxml = null;
+        try {
+            scxml = SCXMLReader.read(stream);
+        } catch (IOException | ModelException | XMLStreamException e) {
+            throw new RuntimeException("Cannot read stream for state machine id: " + stateMachineId, e);
+        }
+        SCXMLExecutor executor = new SCXMLExecutor();
+        try {
+            executor.setStateMachine(scxml);
+        } catch (ModelException e) {
+            throw new RuntimeException("Invalid model for state machine id: " + stateMachineId, e);
+        }
+        try {
+            executor.go();
+        } catch (ModelException e) {
+            throw new RuntimeException("Cannot start executor with state machine id: " + stateMachineId, e);
+        }
+        return executor;
     }
 
     public boolean exists(String stateMachineId) {
