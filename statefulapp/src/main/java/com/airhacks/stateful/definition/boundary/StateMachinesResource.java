@@ -1,0 +1,51 @@
+package com.airhacks.stateful.definition.boundary;
+
+import java.io.InputStream;
+import java.net.URI;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.container.ResourceContext;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
+/**
+ *
+ * @author airhacks.com
+ */
+@Stateless
+@Path("definitions")
+public class StateMachinesResource {
+
+    @Inject
+    DefinitionsManager dm;
+
+    @Context
+    ResourceContext rc;
+
+    @Path("{stateMachineId}")
+    public StateMachineResource stateMachine() {
+        return rc.initResource(new StateMachineResource(dm));
+    }
+
+    @GET
+    public JsonArray all() {
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        this.dm.stateMachineNames().forEach(builder::add);
+        return builder.build();
+    }
+
+    @POST
+    public Response define(InputStream stream, @Context UriInfo info) {
+        String id = this.dm.create(stream);
+        URI uri = info.getAbsolutePathBuilder().path("/" + id).build();
+        return Response.created(uri).build();
+    }
+
+}

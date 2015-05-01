@@ -43,7 +43,7 @@ public class StateManager {
         return resultBuilder.build();
     }
 
-    public JsonArray getStates(SCXMLExecutor executor) {
+    JsonArray getStates(SCXMLExecutor executor) {
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
         Status status = executor.getStatus();
         Set<EnterableState> states = status.getStates();
@@ -51,7 +51,7 @@ public class StateManager {
         return arrayBuilder.build();
     }
 
-    public JsonObject nextTargets(EnterableState state) {
+    JsonObject nextTargets(EnterableState state) {
         JsonObjectBuilder transitionsBuilder = Json.createObjectBuilder();
         if (state instanceof State) {
             State s = (State) state;
@@ -62,7 +62,7 @@ public class StateManager {
         return transitionsBuilder.build();
     }
 
-    public JsonArray extractTargets(Transition transition) {
+    JsonArray extractTargets(Transition transition) {
         JsonArrayBuilder targetsBuilder = Json.createArrayBuilder();
         transition.getTargets().stream().map(t -> t.getId()).forEach(targetsBuilder::add);
         return targetsBuilder.build();

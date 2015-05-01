@@ -28,7 +28,12 @@
             <artifactId>commons-jexl</artifactId>
             <version>2.1.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.0.4</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <finalName>statefulapp</finalName>
