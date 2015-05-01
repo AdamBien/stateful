@@ -1,4 +1,4 @@
-package com.airhacks.stateful.definition.control;
+package com.airhacks.stateful.machine.control;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

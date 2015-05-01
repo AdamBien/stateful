@@ -1,6 +1,6 @@
-package com.airhacks.stateful.definition.boundary;
+package com.airhacks.stateful.machine.boundary;
 
-import com.airhacks.stateful.definition.control.DefinitionStore;
+import com.airhacks.stateful.machine.control.DefinitionStore;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -20,7 +20,7 @@ import org.apache.commons.scxml2.model.SCXML;
  * @author airhacks.com
  */
 @Stateless
-public class DefinitionsManager {
+public class StateMachinesManager {
 
     @Inject
     DefinitionStore ds;

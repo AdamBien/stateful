@@ -1,5 +1,6 @@
-package com.airhacks.stateful.definition.boundary;
+package com.airhacks.stateful.machine.boundary;
 
+import com.airhacks.stateful.machine.boundary.StateMachinesManager;
 import java.io.InputStream;
 import org.apache.commons.scxml2.SCXMLExecutor;
 import static org.junit.Assert.assertNotNull;
@@ -11,13 +12,13 @@ import org.junit.Test;
  *
  * @author airhacks.com
  */
-public class DefinitionsManagerTest {
+public class StateMachinesManagerTest {
 
-    DefinitionsManager cut;
+    StateMachinesManager cut;
 
     @Before
     public void init() {
-        this.cut = new DefinitionsManager();
+        this.cut = new StateMachinesManager();
     }
 
     @Test

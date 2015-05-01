@@ -1,6 +1,6 @@
 package com.airhacks.stateful.states.boundary;
 
-import com.airhacks.stateful.definition.control.DefinitionStore;
+import com.airhacks.stateful.machine.control.DefinitionStore;
 import java.util.Set;
 import javax.ejb.Stateless;
 import javax.inject.Inject;

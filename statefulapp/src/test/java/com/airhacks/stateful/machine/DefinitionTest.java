@@ -1,4 +1,4 @@
-package com.airhacks.stateful.definition;
+package com.airhacks.stateful.machine;
 
 import java.io.IOException;
 import java.util.List;

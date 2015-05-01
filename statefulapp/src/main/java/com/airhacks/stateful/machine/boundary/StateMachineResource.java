@@ -1,4 +1,4 @@
-package com.airhacks.stateful.definition.boundary;
+package com.airhacks.stateful.machine.boundary;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -17,9 +17,9 @@ import javax.ws.rs.core.UriInfo;
  */
 public class StateMachineResource {
 
-    DefinitionsManager dm;
+    StateMachinesManager dm;
 
-    public StateMachineResource(DefinitionsManager dm) {
+    public StateMachineResource(StateMachinesManager dm) {
         this.dm = dm;
     }
 

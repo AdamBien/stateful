@@ -16,10 +16,10 @@ import org.junit.Test;
  *
  * @author airhacks.com
  */
-public class DefinitionsResourceIT {
+public class StateMachinesResourceIT {
 
     @Rule
-    public JAXRSClientProvider builder = JAXRSClientProvider.buildWithURI("http://localhost:8080/statefulapp/resources/definitions");
+    public JAXRSClientProvider builder = JAXRSClientProvider.buildWithURI("http://localhost:8080/statefulapp/resources/machines");
 
     @Test
     public void crud() {

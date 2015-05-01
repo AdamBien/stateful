@@ -1,4 +1,4 @@
-package com.airhacks.stateful.definition.boundary;
+package com.airhacks.stateful.machine.boundary;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -20,11 +20,11 @@ import javax.ws.rs.core.UriInfo;
  * @author airhacks.com
  */
 @Stateless
-@Path("definitions")
+@Path("machines")
 public class StateMachinesResource {
 
     @Inject
-    DefinitionsManager dm;
+    StateMachinesManager dm;
 
     @Context
     ResourceContext rc;

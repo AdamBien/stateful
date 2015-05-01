@@ -1,5 +1,6 @@
-package com.airhacks.stateful.definition.control;
+package com.airhacks.stateful.machine.control;
 
+import com.airhacks.stateful.machine.control.DefinitionStore;
 import org.apache.commons.scxml2.SCXMLExecutor;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
