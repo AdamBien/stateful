@@ -5,7 +5,9 @@ import java.net.URI;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
@@ -18,9 +20,14 @@ import javax.ws.rs.core.UriInfo;
 public class StateMachineResource {
 
     StateMachinesManager dm;
+    StateManager sm;
 
-    public StateMachineResource(StateMachinesManager dm) {
+    @Context
+    ResourceContext rc;
+
+    public StateMachineResource(StateMachinesManager dm, StateManager sm) {
         this.dm = dm;
+        this.sm = sm;
     }
 
     @PUT
@@ -50,6 +57,11 @@ public class StateMachineResource {
     @DELETE
     public void remove(@PathParam("stateMachineId") String stateMachineId) {
         dm.remove(stateMachineId);
+    }
+
+    @Path("states")
+    public StatesResource states() {
+        return this.rc.initResource(new StatesResource(this.sm));
     }
 
 }

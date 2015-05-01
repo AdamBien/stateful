@@ -1,5 +1,6 @@
-package com.airhacks.stateful.states.boundary;
+package com.airhacks.stateful.machine.boundary;
 
+import com.airhacks.stateful.machine.boundary.StateManager;
 import com.airhacks.stateful.machine.control.DefinitionStore;
 import java.io.IOException;
 import javax.json.JsonArray;

@@ -26,12 +26,15 @@ public class StateMachinesResource {
     @Inject
     StateMachinesManager dm;
 
+    @Inject
+    StateManager sm;
+
     @Context
     ResourceContext rc;
 
     @Path("{stateMachineId}")
     public StateMachineResource stateMachine() {
-        return rc.initResource(new StateMachineResource(dm));
+        return rc.initResource(new StateMachineResource(dm, sm));
     }
 
     @GET

@@ -1,6 +1,5 @@
 package com.airhacks.stateful.machine.boundary;
 
-import com.airhacks.stateful.machine.boundary.StateMachinesManager;
 import java.io.InputStream;
 import org.apache.commons.scxml2.SCXMLExecutor;
 import static org.junit.Assert.assertNotNull;

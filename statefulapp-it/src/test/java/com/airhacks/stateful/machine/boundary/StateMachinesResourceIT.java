@@ -1,4 +1,4 @@
-package com.airhacks.stateful.definition.boundary;
+package com.airhacks.stateful.machine.boundary;
 
 import com.airhacks.rulz.jaxrsclient.JAXRSClientProvider;
 import java.io.InputStream;
