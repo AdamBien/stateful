@@ -10,6 +10,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,20 +27,40 @@ public class StatesResourceIT {
     @Rule
     public JAXRSClientProvider statesBuilder = JAXRSClientProvider.buildWithURI("http://localhost:8080/statefulapp/resources/machines/{stateMachineId}/states/");
 
+    private static final String INITIAL_EVENT_NAME = "login";
+
     @Test
     public void traverseTransitions() {
+        String machineName = initMachine();
+        String nextEvent = triggerEvent(machineName, INITIAL_EVENT_NAME);
+        nextEvent = triggerEvent(machineName, nextEvent);
+        nextEvent = triggerEvent(machineName, nextEvent);
+        nextEvent = triggerEvent(machineName, nextEvent);
+        System.out.println("Final event = " + nextEvent);
+    }
 
+    String initMachine() {
         String key = "duke_" + System.nanoTime();
         WebTarget tut = machinesBuilder.target();
-
         InputStream stream = this.getClass().getResourceAsStream("/state.xml");
         Response response = tut.path(key).request().put(Entity.entity(stream, MediaType.WILDCARD_TYPE));
         assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
+        return key;
+    }
 
-        String nextEvent = triggerEvent(key, "login");
-        nextEvent = triggerEvent(key, nextEvent);
-        nextEvent = triggerEvent(key, nextEvent);
-        nextEvent = triggerEvent(key, nextEvent);
+    @Test
+    public void status() {
+        final String expected = "authenticated";
+        String machineName = initMachine();
+        triggerEvent(machineName, INITIAL_EVENT_NAME);
+
+        JsonObject status = statesBuilder.target().
+                resolveTemplate("stateMachineId", machineName).
+                request(MediaType.APPLICATION_JSON).get(JsonObject.class);
+        assertNotNull(status);
+
+        String actual = status.getJsonArray("current-state").getString(0);
+        assertThat(actual, is(expected));
     }
 
     String triggerEvent(String key, String event) {
