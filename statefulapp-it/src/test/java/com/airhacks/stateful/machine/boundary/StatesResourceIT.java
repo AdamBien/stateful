@@ -42,24 +42,32 @@ public class StatesResourceIT {
         assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
         JsonObject result = response.readEntity(JsonObject.class);
         System.out.println("result = " + result);
-
         JsonArray nextTransitions = result.getJsonArray("next-transitions");
         JsonObject transition = nextTransitions.getJsonObject(0);
-
         String eventName = transition.keySet().iterator().next();
         response = statesBuilder.target().resolveTemplate("stateMachineId", key).
                 request(MediaType.APPLICATION_JSON).
                 put(Entity.json(event(eventName)));
+        assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
+        result = response.readEntity(JsonObject.class);
+        System.out.println("result = " + result);
+        nextTransitions = result.getJsonArray("next-transitions");
+        transition = nextTransitions.getJsonObject(0);
+        eventName = transition.keySet().iterator().next();
+        response = statesBuilder.target().resolveTemplate("stateMachineId", key).
+                request(MediaType.APPLICATION_JSON).
+                put(Entity.json(event(eventName)));
+        assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
 
         result = response.readEntity(JsonObject.class);
         System.out.println("result = " + result);
         nextTransitions = result.getJsonArray("next-transitions");
         transition = nextTransitions.getJsonObject(0);
-
         eventName = transition.keySet().iterator().next();
         response = statesBuilder.target().resolveTemplate("stateMachineId", key).
                 request(MediaType.APPLICATION_JSON).
                 put(Entity.json(event(eventName)));
+        assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
 
         result = response.readEntity(JsonObject.class);
         System.out.println("result = " + result);
