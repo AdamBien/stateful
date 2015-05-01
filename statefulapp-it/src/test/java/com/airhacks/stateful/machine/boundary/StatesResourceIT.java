@@ -63,6 +63,29 @@ public class StatesResourceIT {
         assertThat(actual, is(expected));
     }
 
+    @Test
+    public void reset() {
+        final String expected = "indexpage";
+        String machineName = initMachine();
+        triggerEvent(machineName, INITIAL_EVENT_NAME);
+
+        statesBuilder.target().
+                resolveTemplate("stateMachineId", machineName).
+                request(MediaType.APPLICATION_JSON).get(JsonObject.class);
+
+        Response deleteResponse = statesBuilder.target().
+                resolveTemplate("stateMachineId", machineName).
+                request(MediaType.APPLICATION_JSON).delete();
+        assertThat(deleteResponse.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
+
+        JsonObject status = statesBuilder.target().
+                resolveTemplate("stateMachineId", machineName).
+                request(MediaType.APPLICATION_JSON).get(JsonObject.class);
+
+        String actual = status.getJsonArray("current-state").getString(0);
+        assertThat(actual, is(expected));
+    }
+
     String triggerEvent(String key, String event) {
         Response response = statesBuilder.target().resolveTemplate("stateMachineId", key).
                 request(MediaType.APPLICATION_JSON).

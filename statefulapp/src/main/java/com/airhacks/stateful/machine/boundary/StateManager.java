@@ -37,6 +37,16 @@ public class StateManager {
         return status(stateMachineId);
     }
 
+    public JsonObject reset(String stateMachineId) {
+        SCXMLExecutor executor = store.get(stateMachineId);
+        try {
+            executor.reset();
+        } catch (ModelException ex) {
+            throw new IllegalStateException("Cannot reset executor with stm: " + stateMachineId, ex);
+        }
+        return status(stateMachineId);
+    }
+
     public JsonObject status(String stateMachineId) {
         SCXMLExecutor executor = store.get(stateMachineId);
         JsonObjectBuilder resultBuilder = Json.createObjectBuilder();

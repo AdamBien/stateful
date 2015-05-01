@@ -2,6 +2,7 @@ package com.airhacks.stateful.machine.boundary;
 
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
@@ -32,6 +33,12 @@ public class StatesResource {
     @GET
     public Response status(@PathParam("stateMachineId") String stateMachineId) {
         JsonObject status = sm.status(stateMachineId);
+        return Response.ok(status).build();
+    }
+
+    @DELETE
+    public Response reset(@PathParam("stateMachineId") String stateMachineId) {
+        JsonObject status = sm.reset(stateMachineId);
         return Response.ok(status).build();
     }
 
