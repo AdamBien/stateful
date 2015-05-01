@@ -28,13 +28,18 @@ public class StateManager {
     DefinitionStore store;
 
     public JsonObject trigger(String stateMachineId, String event) {
-        JsonObjectBuilder resultBuilder = Json.createObjectBuilder();
         SCXMLExecutor executor = store.get(stateMachineId);
         try {
             executor.triggerEvent(new TriggerEvent(event, TriggerEvent.SIGNAL_EVENT));
         } catch (ModelException ex) {
             throw new IllegalStateException("Cannot trigger event: " + event + " with stm: " + stateMachineId, ex);
         }
+        return status(stateMachineId);
+    }
+
+    public JsonObject status(String stateMachineId) {
+        SCXMLExecutor executor = store.get(stateMachineId);
+        JsonObjectBuilder resultBuilder = Json.createObjectBuilder();
         resultBuilder.add("current-state", getStates(executor));
         Set<EnterableState> states = executor.getStatus().getStates();
         JsonArrayBuilder nextStatesBuilder = Json.createArrayBuilder();

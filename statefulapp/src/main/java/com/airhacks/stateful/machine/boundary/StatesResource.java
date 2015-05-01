@@ -2,6 +2,7 @@ package com.airhacks.stateful.machine.boundary;
 
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -26,6 +27,12 @@ public class StatesResource {
     public Response transition(@PathParam("stateMachineId") String stateMachineId, JsonObject event) {
         JsonObject result = sm.trigger(stateMachineId, event.getString("event"));
         return Response.ok(result).build();
+    }
+
+    @GET
+    public Response status(@PathParam("stateMachineId") String stateMachineId) {
+        JsonObject status = sm.status(stateMachineId);
+        return Response.ok(status).build();
     }
 
 }
