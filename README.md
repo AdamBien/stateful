@@ -49,15 +49,26 @@ curl http://localhost:8080/statefulapp/resources/machines/duke
 Response:
 ```
 HTTP/1.1 200 OK
-Content-Type: application/json
+Content-Type: application/xml
 (…)
-[”duke”]% 
 ```
-
+```xml
+<?xml version=‘1.0’ encoding=‘UTF-8’?><scxml xmlns=“http://www.w3.org/2005/07/scxml” xmlns:cs=“http://commons.apache.org/scxml” version=“1.0” initial=“index page”><!—http://commons.apache.org/scxml--><state id=“index page”><transition event=“login” target=“authenticated”/></state><state id=“authenticated”><transition event=“browse” target=“browsing”/><transition event=“logout” target=“unauthenticated”/></state><state id=“browsing”><transition event=“logout” target=“unauthenticated”/></state><state id=“unauthenticated”><transition event=“authenticate” target=“index page”/></state></scxml>
+```
 ## list all installed state machine names
 ```
 curl http://localhost:8080/statefulapp/resources/machines/ 
 ```
+Response:
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+```
+
+```json
+[“duke”]
+```
+
 ## retrieve the current event and next transitions
 
 ```
@@ -99,4 +110,14 @@ HTTP/1.1 200 OK
 ```json
 {“current-state”:[“index page”],
 ”next-transitions”:[{“login”:[“authenticated”]}]}
+```
+
+## destroy a state machine
+```
+curl -i -XDELETE http://localhost:8080/statefulapp/resources/machines/duke/
+```
+Response:
+```
+HTTP/1.1 204 No Content
+(…)
 ```
