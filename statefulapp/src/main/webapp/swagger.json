@@ -1,0 +1,245 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.1-SNAPSHOT",
+        "title": "stateful"
+    },
+    "host": "localhost:8080/statefulapp",
+    "basePath": "/resources",
+    "schemas": ["http"],
+    "paths": {
+        "/machines": {
+            "get": {
+                "consumes": [],
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {},
+                        "schema": {
+                            "type": "array"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": ["application/xml"],
+                "produces": ["application/json"],
+                "parameters": [{
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {}
+                    }],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "headers": {
+                            "Location": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/machines/{stateMachineId}": {
+            "put": {
+                "consumes": ["application/xml"],
+                "produces": ["application/json"],
+                "parameters": [{
+                        "name": "stateMachineId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {}
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {}
+                    },
+                    "201": {
+                        "description": "Created",
+                        "headers": {
+                            "Location": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "consumes": [],
+                "produces": ["application/xml"],
+                "parameters": [{
+                        "name": "stateMachineId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {},
+                        "schema": {}
+                    },
+                    "204": {
+                        "description": "No Content",
+                        "headers": {}
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [],
+                "produces": [],
+                "parameters": [{
+                        "name": "stateMachineId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {},
+                        "schema": {
+                            "$ref": "definition#1"
+                        }
+                    }
+                }
+            }
+        },
+        "/machines/{stateMachineId}/states": {
+            "get": {
+                "consumes": [],
+                "produces": ["application/json"],
+                "parameters": [{
+                        "name": "stateMachineId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {},
+                        "schema": {
+                            "$ref": "definition#2"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [],
+                "produces": [],
+                "parameters": [{
+                        "name": "stateMachineId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {},
+                        "schema": {
+                            "$ref": "definition#4"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                        "name": "stateMachineId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {}
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {},
+                        "schema": {
+                            "$ref": "definition#6"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "definition#1": {
+            "properties": {}
+        },
+        "definition#3": {
+            "properties": {}
+        },
+        "definition#2": {
+            "properties": {
+                "next-transitions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "definition#3"
+                    }
+                },
+                "current-state": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "definition#5": {
+            "properties": {}
+        },
+        "definition#4": {
+            "properties": {
+                "next-transitions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "definition#5"
+                    }
+                },
+                "current-state": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "definition#7": {
+            "properties": {}
+        },
+        "definition#6": {
+            "properties": {
+                "next-transitions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "definition#7"
+                    }
+                },
+                "current-state": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
