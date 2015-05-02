@@ -18,5 +18,4 @@
     <state id="unauthenticated">
         <transition event="authenticate"   target="indexpage"/>
     </state>
-
 </scxml>
