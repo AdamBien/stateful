@@ -14,8 +14,6 @@ import javax.ws.rs.core.Response;
  *
  * @author airhacks.com
  */
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class StatesResource {
 
     StateManager sm;
@@ -32,6 +30,8 @@ public class StatesResource {
      * @return the status of the state machine
      */
     @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response transition(@PathParam("stateMachineId") String stateMachineId, JsonObject event) {
         JsonObject result = sm.trigger(stateMachineId, event.getString("event"));
         return Response.ok(result).build();
@@ -45,6 +45,7 @@ public class StatesResource {
      * "next-transitions"
      */
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public Response status(@PathParam("stateMachineId") String stateMachineId) {
         JsonObject status = sm.status(stateMachineId);
         return Response.ok(status).build();
