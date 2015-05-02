@@ -2,6 +2,7 @@ package com.airhacks.stateful.machine.boundary;
 
 import com.airhacks.rulz.jaxrsclient.JAXRSClientProvider;
 import java.io.InputStream;
+import javax.json.JsonArray;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -26,12 +27,19 @@ public class StateMachinesResourceIT {
         WebTarget tut = builder.target();
         Response response = tut.request(MediaType.APPLICATION_JSON).get();
         assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
+        JsonArray machineDefinitions = response.readEntity(JsonArray.class);
+        assertNotNull(machineDefinitions);
+        int initialSize = machineDefinitions.size();
 
         InputStream stream = this.getClass().getResourceAsStream("/state.xml");
         response = tut.request().post(Entity.entity(stream, MediaType.WILDCARD_TYPE));
         assertThat(response.getStatus(), is(201));
         String location = response.getHeaderString("Location");
         assertNotNull(location);
+
+        response = tut.request(MediaType.APPLICATION_JSON).get();
+        machineDefinitions = response.readEntity(JsonArray.class);
+        assertThat(machineDefinitions.size(), is(++initialSize));
 
         WebTarget definitionTarget = builder.target(location);
         response = definitionTarget.request().get();
