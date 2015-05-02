@@ -52,6 +52,7 @@ HTTP/1.1 200 OK
 Content-Type: application/xml
 (…)
 ```
+
 ```xml
 <?xml version=‘1.0’ encoding=‘UTF-8’?><scxml xmlns=“http://www.w3.org/2005/07/scxml” xmlns:cs=“http://commons.apache.org/scxml” version=“1.0” initial=“index page”><!—http://commons.apache.org/scxml--><state id=“index page”><transition event=“login” target=“authenticated”/></state><state id=“authenticated”><transition event=“browse” target=“browsing”/><transition event=“logout” target=“unauthenticated”/></state><state id=“browsing”><transition event=“logout” target=“unauthenticated”/></state><state id=“unauthenticated”><transition event=“authenticate” target=“index page”/></state></scxml>
 ```
