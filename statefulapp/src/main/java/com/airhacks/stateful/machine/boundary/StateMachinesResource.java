@@ -37,6 +37,10 @@ public class StateMachinesResource {
         return rc.initResource(new StateMachineResource(dm, sm));
     }
 
+    /**
+     *
+     * @return names of all known state machines
+     */
     @GET
     public JsonArray all() {
         JsonArrayBuilder builder = Json.createArrayBuilder();
@@ -44,6 +48,12 @@ public class StateMachinesResource {
         return builder.build();
     }
 
+    /**
+     * This is the only non-idempotent method.
+     *
+     * @param stream a valid SXCML file
+     * @return a Location header containing the UUID of the create machine
+     */
     @POST
     public Response define(InputStream stream, @Context UriInfo info) {
         String id = this.dm.create(stream);

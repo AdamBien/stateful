@@ -30,6 +30,12 @@ public class StateMachineResource {
         this.sm = sm;
     }
 
+    /**
+     *
+     * @param stateMachineId unique identifier for a SCXML configuration
+     * @param stream a valid SCXML file
+     * @return 201 for created state machine and 200 for update
+     */
     @PUT
     public Response define(@PathParam("stateMachineId") String stateMachineId, InputStream stream, @Context UriInfo info) {
         boolean created = !this.dm.exists(stateMachineId);
@@ -42,6 +48,11 @@ public class StateMachineResource {
         }
     }
 
+    /**
+     *
+     * @param stateMachineId name of the state machine
+     * @return the SCXML configuration as stream.
+     */
     @GET
     public Response get(@PathParam("stateMachineId") String stateMachineId) {
         if (!this.dm.exists(stateMachineId)) {
@@ -54,6 +65,11 @@ public class StateMachineResource {
         return Response.ok(so).build();
     }
 
+    /**
+     * Removes and resets the state machine
+     *
+     * @param stateMachineId the name of the state machine
+     */
     @DELETE
     public void remove(@PathParam("stateMachineId") String stateMachineId) {
         dm.remove(stateMachineId);

@@ -24,18 +24,38 @@ public class StatesResource {
         this.sm = sm;
     }
 
+    /**
+     * Triggers transition from the current state with the event passed as JSON
+     *
+     * @param stateMachineId name of the state machine
+     * @param event a JsonObject containing the "event" String to trigger
+     * @return the status of the state machine
+     */
     @PUT
     public Response transition(@PathParam("stateMachineId") String stateMachineId, JsonObject event) {
         JsonObject result = sm.trigger(stateMachineId, event.getString("event"));
         return Response.ok(result).build();
     }
 
+    /**
+     * Returns the status of the state machine
+     *
+     * @param stateMachineId name of the state machine
+     * @return the status of the machine: the "current-state" and
+     * "next-transitions"
+     */
     @GET
     public Response status(@PathParam("stateMachineId") String stateMachineId) {
         JsonObject status = sm.status(stateMachineId);
         return Response.ok(status).build();
     }
 
+    /**
+     * Resets the state machine to the initial state
+     *
+     * @param stateMachineId name of the state machine
+     * @return
+     */
     @DELETE
     public Response reset(@PathParam("stateMachineId") String stateMachineId) {
         JsonObject status = sm.reset(stateMachineId);
