@@ -28,7 +28,7 @@ public class StateManager {
     DefinitionStore store;
 
     public JsonObject trigger(String stateMachineId, String event) {
-        SCXMLExecutor executor = store.get(stateMachineId);
+        SCXMLExecutor executor = store.find(stateMachineId);
         try {
             executor.triggerEvent(new TriggerEvent(event, TriggerEvent.SIGNAL_EVENT));
         } catch (ModelException ex) {
@@ -38,7 +38,7 @@ public class StateManager {
     }
 
     public JsonObject reset(String stateMachineId) {
-        SCXMLExecutor executor = store.get(stateMachineId);
+        SCXMLExecutor executor = store.find(stateMachineId);
         try {
             executor.reset();
         } catch (ModelException ex) {
@@ -48,7 +48,7 @@ public class StateManager {
     }
 
     public JsonObject status(String stateMachineId) {
-        SCXMLExecutor executor = store.get(stateMachineId);
+        SCXMLExecutor executor = store.find(stateMachineId);
         JsonObjectBuilder resultBuilder = Json.createObjectBuilder();
         resultBuilder.add("current-state", getStates(executor));
         Set<EnterableState> states = executor.getStatus().getStates();
