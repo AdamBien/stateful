@@ -1,17 +1,14 @@
 package com.airhacks.stateful.machine.boundary;
 
-import com.airhacks.stateful.machine.boundary.StateManager;
+import com.airhacks.stateful.TestSCXMLExecutorProvider;
 import com.airhacks.stateful.machine.control.DefinitionStore;
-import java.io.IOException;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.xml.stream.XMLStreamException;
 import org.apache.commons.scxml2.SCXMLExecutor;
-import org.apache.commons.scxml2.io.SCXMLReader;
-import org.apache.commons.scxml2.model.ModelException;
-import org.apache.commons.scxml2.model.SCXML;
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  *
@@ -19,25 +16,21 @@ import org.junit.Test;
  */
 public class StateManagerTest {
 
-    DefinitionStore ds;
-    StateManager cut;
+    private StateManager cut;
+    private DefinitionStore ds;
 
     @Before
     public void init() {
-        this.ds = new DefinitionStore();
-        this.ds.init();
+        this.ds = mock(DefinitionStore.class);
         this.cut = new StateManager();
         this.cut.store = this.ds;
     }
 
     @Test
-    public void trigger() throws IOException, ModelException, XMLStreamException {
+    public void trigger() throws Exception {
         String stateMachineId = "test";
-        SCXML scxml = SCXMLReader.read(this.getClass().getResourceAsStream("/state.xml"));
-        SCXMLExecutor executor = new SCXMLExecutor();
-        executor.setStateMachine(scxml);
-        executor.go();
-        this.ds.store(stateMachineId, executor);
+        SCXMLExecutor executor = TestSCXMLExecutorProvider.create();
+        when(this.ds.find(stateMachineId)).thenReturn(executor);
         String event = "login";
         JsonObject result = this.cut.trigger(stateMachineId, event);
         System.out.println("result = " + result);
