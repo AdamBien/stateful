@@ -1,51 +1,48 @@
 package com.airhacks.stateful.machine.control;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import javax.annotation.PostConstruct;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
-import javax.ejb.Singleton;
+import com.airhacks.stateful.machine.entity.StateMachine;
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import org.apache.commons.scxml2.SCXMLExecutor;
 
 /**
  *
  * @author airhacks.com
  */
-@Singleton
-@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
+@Stateless
 public class DefinitionStore {
 
-    private ConcurrentMap<String, SCXMLExecutor> stateMachines;
-
-    @PostConstruct
-    public void init() {
-        this.stateMachines = new ConcurrentHashMap<>();
-    }
+    @PersistenceContext
+    EntityManager em;
 
     public void store(String stateMachineId, SCXMLExecutor executor) {
-        this.stateMachines.put(stateMachineId, executor);
-    }
-
-    public SCXMLExecutor get(String stateMachineId) {
-        return this.stateMachines.get(stateMachineId);
-    }
-
-    public void remove(String stateMachineId) {
-        this.stateMachines.remove(stateMachineId);
-    }
-
-    public boolean exists(String stateMachineId) {
-        return this.stateMachines.containsKey(stateMachineId);
-    }
-
-    public Set<String> stateMachineNames() {
-        return this.stateMachines.keySet();
+        this.em.merge(new StateMachine(stateMachineId, executor));
     }
 
     public SCXMLExecutor find(String stateMachineId) {
-        return this.stateMachines.get(stateMachineId);
+        StateMachine machine = this.em.find(StateMachine.class, stateMachineId);
+        if (machine == null) {
+            return null;
+        }
+        return machine.getSCXMLExecutor();
+    }
+
+    public void remove(String stateMachineId) {
+        StateMachine machine = this.em.find(StateMachine.class, stateMachineId);
+        if (machine != null) {
+            this.em.remove(machine);
+        }
+    }
+
+    public boolean exists(String stateMachineId) {
+        return this.find(stateMachineId) != null;
+    }
+
+    public List<String> stateMachineNames() {
+        return this.em.createNamedQuery(StateMachine.findAllNames, String.class).
+                getResultList();
     }
 
 }
