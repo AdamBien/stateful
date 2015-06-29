@@ -11,6 +11,8 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.xml.stream.XMLStreamException;
 import org.apache.commons.scxml2.SCXMLExecutor;
+import org.apache.commons.scxml2.env.javascript.JSContext;
+import org.apache.commons.scxml2.env.javascript.JSEvaluator;
 import org.apache.commons.scxml2.io.SCXMLReader;
 import org.apache.commons.scxml2.io.SCXMLWriter;
 import org.apache.commons.scxml2.model.ModelException;
@@ -42,6 +44,8 @@ public class StateMachinesManager {
         SCXMLExecutor executor = new SCXMLExecutor();
         try {
             executor.setStateMachine(scxml);
+            executor.setRootContext(new JSContext());
+            executor.setEvaluator(new JSEvaluator());
         } catch (ModelException e) {
             throw new RuntimeException("Invalid model for state machine id: " + stateMachineId, e);
         }
