@@ -39,6 +39,8 @@ public class StateMachine {
     public SCXMLExecutor getSCXMLExecutor() {
         SCXMLExecutor scxmlExecutor = new SCXMLExecutor();
         scxmlExecutor.attachInstance(state);
+
+        scxmlExecutor.setErrorReporter(new SerializableErrorReporter());
         return scxmlExecutor;
     }
 
