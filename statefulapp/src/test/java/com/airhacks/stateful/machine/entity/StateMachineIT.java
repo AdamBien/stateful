@@ -1,13 +1,18 @@
 package com.airhacks.stateful.machine.entity;
 
 import com.airhacks.stateful.TestSCXMLExecutorProvider;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.xml.stream.XMLStreamException;
+import org.apache.commons.scxml2.SCInstance;
 import org.apache.commons.scxml2.SCXMLExecutor;
 import org.apache.commons.scxml2.io.SCXMLReader;
 import org.apache.commons.scxml2.model.ModelException;
@@ -68,6 +73,25 @@ public class StateMachineIT {
                 getResultList();
         assertNotNull(resultList);
         assertTrue(resultList.contains(id));
+    }
+
+    @Test
+    public void scxmlExecutorSerialization() throws Exception {
+        SCXMLExecutor executor = TestSCXMLExecutorProvider.create();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(stream);
+        oos.writeObject(executor.detachInstance());
+        oos.flush();
+
+        byte[] bytes = stream.toByteArray();
+
+        ByteArrayInputStream iis = new ByteArrayInputStream(bytes);
+        ObjectInputStream ois = new ObjectInputStream(iis);
+        SCInstance readInstance = (SCInstance) ois.readObject();
+        assertNotNull(readInstance);
+
+        SCXMLExecutor deserialized = new SCXMLExecutor();
+        deserialized.attachInstance(readInstance);
     }
 
 }
