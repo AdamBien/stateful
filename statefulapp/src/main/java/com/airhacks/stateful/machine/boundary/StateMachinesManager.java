@@ -4,6 +4,7 @@ import com.airhacks.stateful.machine.control.DefinitionStore;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import java.util.UUID;
 import javax.ejb.Stateless;
@@ -73,7 +74,9 @@ public class StateMachinesManager {
             return;
         }
         try {
-            SCXMLWriter.write(executor.getStateMachine(), output);
+            SCXMLWriter.Configuration config = new SCXMLWriter.Configuration(null, null, null,
+                    StandardCharsets.UTF_8.name(), true, false);
+            SCXMLWriter.write(executor.getStateMachine(), output, config);
         } catch (IOException | XMLStreamException ex) {
             throw new IllegalStateException("Cannot serialize state", ex);
         }
