@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -64,7 +64,7 @@ public class StateMachinesManager {
         return stateMachineId;
     }
 
-    public Set<String> stateMachineNames() {
+    public List<String> stateMachineNames() {
         return this.ds.stateMachineNames();
     }
 
@@ -83,12 +83,6 @@ public class StateMachinesManager {
     }
 
     public void remove(String stateMachineId) {
-        SCXMLExecutor executor = this.ds.find(stateMachineId);
-        try {
-            executor.reset();
-        } catch (ModelException ex) {
-            throw new IllegalStateException("Cannot reset executor for: " + stateMachineId, ex);
-        }
         this.ds.remove(stateMachineId);
     }
 
