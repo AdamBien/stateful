@@ -33,7 +33,7 @@ public class StatesResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response transition(@PathParam("stateMachineId") String stateMachineId, JsonObject event) {
-        JsonObject result = sm.trigger(stateMachineId, event.getString("event"));
+        JsonObject result = sm.trigger(stateMachineId, event.getString("event"), event.getJsonObject("conditions"));
         return Response.ok(result).build();
     }
 
