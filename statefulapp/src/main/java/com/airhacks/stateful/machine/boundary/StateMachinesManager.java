@@ -1,6 +1,7 @@
 package com.airhacks.stateful.machine.boundary;
 
 import com.airhacks.stateful.machine.control.DefinitionStore;
+import com.airhacks.stateful.machine.control.SCXMLExecutorFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,8 +12,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.xml.stream.XMLStreamException;
 import org.apache.commons.scxml2.SCXMLExecutor;
-import org.apache.commons.scxml2.env.javascript.JSContext;
-import org.apache.commons.scxml2.env.javascript.JSEvaluator;
 import org.apache.commons.scxml2.io.SCXMLReader;
 import org.apache.commons.scxml2.io.SCXMLWriter;
 import org.apache.commons.scxml2.model.ModelException;
@@ -41,11 +40,9 @@ public class StateMachinesManager {
         } catch (IOException | ModelException | XMLStreamException e) {
             throw new RuntimeException("Cannot read stream for state machine id: " + stateMachineId, e);
         }
-        SCXMLExecutor executor = new SCXMLExecutor();
+        SCXMLExecutor executor = null;
         try {
-            executor.setStateMachine(scxml);
-            executor.setRootContext(new JSContext());
-            executor.setEvaluator(new JSEvaluator());
+            executor = SCXMLExecutorFactory.create(scxml);
         } catch (ModelException e) {
             throw new RuntimeException("Invalid model for state machine id: " + stateMachineId, e);
         }

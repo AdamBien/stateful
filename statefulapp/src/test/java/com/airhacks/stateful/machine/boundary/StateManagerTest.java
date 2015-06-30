@@ -9,6 +9,7 @@ import org.apache.commons.scxml2.SCXMLExecutor;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,6 +41,7 @@ public class StateManagerTest {
         JsonArray results = result.getJsonArray("current-state");
     }
 
+    @Ignore
     @Test
     public void triggerWithParameters() throws Exception {
         String stateMachineId = "test";

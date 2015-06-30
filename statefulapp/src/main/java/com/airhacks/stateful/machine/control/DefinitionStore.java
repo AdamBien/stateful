@@ -5,7 +5,9 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.apache.commons.scxml2.SCInstance;
 import org.apache.commons.scxml2.SCXMLExecutor;
+import org.apache.commons.scxml2.model.ModelException;
 
 /**
  *
@@ -17,8 +19,8 @@ public class DefinitionStore {
     @PersistenceContext
     EntityManager em;
 
-    public void store(String stateMachineId, SCXMLExecutor executor) {
-        this.em.merge(new StateMachine(stateMachineId, executor));
+    public StateMachine store(String stateMachineId, SCXMLExecutor executor) {
+        return this.em.merge(new StateMachine(stateMachineId, executor.detachInstance()));
     }
 
     public SCXMLExecutor find(String stateMachineId) {
@@ -26,14 +28,18 @@ public class DefinitionStore {
         if (machine == null) {
             return null;
         }
-        return machine.getSCXMLExecutor();
+        SCInstance state = machine.getState();
+        try {
+            return SCXMLExecutorFactory.create(state);
+        } catch (ModelException ex) {
+            throw new IllegalStateException("Cannot attach state", ex);
+        }
     }
 
     public void remove(String stateMachineId) {
         StateMachine machine = this.em.find(StateMachine.class, stateMachineId);
         if (machine != null) {
             this.em.remove(machine);
-            this.em.detach(machine);
         }
     }
 

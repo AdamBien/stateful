@@ -29,6 +29,15 @@ public class StatesResourceIT {
 
     private static final String INITIAL_EVENT_NAME = "login";
 
+    String initMachine() {
+        String key = "duke_" + System.nanoTime();
+        WebTarget tut = machinesBuilder.target();
+        InputStream stream = this.getClass().getResourceAsStream("/state.xml");
+        Response response = tut.path(key).request().put(Entity.entity(stream, MediaType.WILDCARD_TYPE));
+        assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
+        return key;
+    }
+
     @Test
     public void traverseTransitions() {
         String machineName = initMachine();
@@ -39,13 +48,21 @@ public class StatesResourceIT {
         System.out.println("Final event = " + nextEvent);
     }
 
-    String initMachine() {
-        String key = "duke_" + System.nanoTime();
-        WebTarget tut = machinesBuilder.target();
-        InputStream stream = this.getClass().getResourceAsStream("/state.xml");
-        Response response = tut.path(key).request().put(Entity.entity(stream, MediaType.WILDCARD_TYPE));
-        assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
-        return key;
+    @Test
+    public void conditions() {
+        String machineName = initMachine();
+        JsonObject conditions = Json.createObjectBuilder().add("user", "hacker").build();
+        String nextEvent = triggerEvent(machineName, INITIAL_EVENT_NAME, conditions);
+        System.out.println("nextEvent = " + nextEvent);
+
+        JsonObject status = statesBuilder.target().
+                resolveTemplate("stateMachineId", machineName).
+                request(MediaType.APPLICATION_JSON).get(JsonObject.class);
+        assertNotNull(status);
+
+        String hackerState = status.getJsonArray("current-state").getString(0);
+        assertThat(hackerState, is("isolated"));
+
     }
 
     @Test

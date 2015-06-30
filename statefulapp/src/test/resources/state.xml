@@ -3,8 +3,8 @@
        initial="indexpage">
 
     <state id="indexpage">
-        <transition event="login" cond="user === 'valid'" target="authenticated"/>
-        <transition event="login" cond="user === 'hacker'" target="isolated"/>
+        <transition event="login" cond="print(user);user === 'hacker'" target="isolated"/>
+        <transition event="login" cond="print(user);user === 'valid'" target="authenticated"/>
     </state>
 
     <state id="authenticated">

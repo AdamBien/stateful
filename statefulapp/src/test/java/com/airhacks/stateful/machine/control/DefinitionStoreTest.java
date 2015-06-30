@@ -50,6 +50,8 @@ public class DefinitionStoreTest {
         this.cut.remove(slot);
         this.tx.commit();
 
+        this.cut.em.clear();
+
         assertFalse(this.cut.exists(slot));
         assertNull(this.cut.find(slot));
 

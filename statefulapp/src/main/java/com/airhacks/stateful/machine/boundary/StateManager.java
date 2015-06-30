@@ -36,7 +36,7 @@ public class StateManager {
         }
         try {
             executor.triggerEvent(new TriggerEvent(event, TriggerEvent.SIGNAL_EVENT));
-            executor.getRootContext().reset();
+            this.store.store(stateMachineId, executor);
         } catch (ModelException ex) {
             throw new IllegalStateException("Cannot trigger event: " + event + " with stm: " + stateMachineId, ex);
         }

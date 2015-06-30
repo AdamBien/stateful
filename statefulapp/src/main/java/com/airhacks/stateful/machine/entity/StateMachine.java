@@ -5,7 +5,6 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQuery;
 import org.apache.commons.scxml2.SCInstance;
-import org.apache.commons.scxml2.SCXMLExecutor;
 
 /**
  *
@@ -24,24 +23,20 @@ public class StateMachine {
     @Lob
     private SCInstance state;
 
-    public StateMachine(String stateMachineId, SCXMLExecutor executor) {
-        this.stateMachineId = stateMachineId;
-        this.state = executor.detachInstance();
+    protected StateMachine() {
     }
 
-    protected StateMachine() {
+    public StateMachine(String stateMachineId, SCInstance state) {
+        this.stateMachineId = stateMachineId;
+        this.state = state;
     }
 
     public String getStateMachineId() {
         return stateMachineId;
     }
 
-    public SCXMLExecutor getSCXMLExecutor() {
-        SCXMLExecutor scxmlExecutor = new SCXMLExecutor();
-        scxmlExecutor.attachInstance(state);
-
-        scxmlExecutor.setErrorReporter(new SerializableErrorReporter());
-        return scxmlExecutor;
+    public SCInstance getState() {
+        return state;
     }
 
 }

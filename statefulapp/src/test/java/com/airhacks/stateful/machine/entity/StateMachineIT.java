@@ -1,6 +1,7 @@
 package com.airhacks.stateful.machine.entity;
 
 import com.airhacks.stateful.TestSCXMLExecutorProvider;
+import com.airhacks.stateful.machine.control.SCXMLExecutorFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -48,13 +49,13 @@ public class StateMachineIT {
         initial.setStateMachine(initialState);
         initial.go();
 
-        StateMachine stateMachine = new StateMachine(id, initial);
+        StateMachine stateMachine = new StateMachine(id, initial.detachInstance());
         this.tx.begin();
         this.em.merge(stateMachine);
         this.tx.commit();
 
         StateMachine found = this.em.find(StateMachine.class, id);
-        SCXMLExecutor actual = found.getSCXMLExecutor();
+        SCXMLExecutor actual = SCXMLExecutorFactory.create(found.getState());
 
         SCXML actualState = actual.getStateMachine();
         assertThat(initialState.getName(), is(actualState.getName()));
@@ -64,7 +65,7 @@ public class StateMachineIT {
     public void findAllNames() throws Exception {
         String id = "machine-" + System.currentTimeMillis();
         SCXMLExecutor initial = TestSCXMLExecutorProvider.create();
-        StateMachine stateMachine = new StateMachine(id, initial);
+        StateMachine stateMachine = new StateMachine(id, initial.detachInstance());
         this.tx.begin();
         this.em.merge(stateMachine);
         this.tx.commit();
