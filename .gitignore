@@ -9,3 +9,4 @@ buildNumber.properties
 /statefulapp/nbproject/
 /statefulapp/derby.log
 /statefulapp/statefulDB/
+*.sh
