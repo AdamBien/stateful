@@ -33,6 +33,7 @@ public class DefinitionStore {
         StateMachine machine = this.em.find(StateMachine.class, stateMachineId);
         if (machine != null) {
             this.em.remove(machine);
+            this.em.detach(machine);
         }
     }
 
