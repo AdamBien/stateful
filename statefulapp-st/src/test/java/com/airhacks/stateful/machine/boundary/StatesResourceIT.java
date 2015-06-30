@@ -32,10 +32,10 @@ public class StatesResourceIT {
     @Test
     public void traverseTransitions() {
         String machineName = initMachine();
-        String nextEvent = triggerEvent(machineName, INITIAL_EVENT_NAME);
-        nextEvent = triggerEvent(machineName, nextEvent);
-        nextEvent = triggerEvent(machineName, nextEvent);
-        nextEvent = triggerEvent(machineName, nextEvent);
+        String nextEvent = triggerEvent(machineName, INITIAL_EVENT_NAME, null);
+        nextEvent = triggerEvent(machineName, nextEvent, null);
+        nextEvent = triggerEvent(machineName, nextEvent, null);
+        nextEvent = triggerEvent(machineName, nextEvent, null);
         System.out.println("Final event = " + nextEvent);
     }
 
@@ -52,7 +52,7 @@ public class StatesResourceIT {
     public void status() {
         final String expected = "authenticated";
         String machineName = initMachine();
-        triggerEvent(machineName, INITIAL_EVENT_NAME);
+        triggerEvent(machineName, INITIAL_EVENT_NAME, null);
 
         JsonObject status = statesBuilder.target().
                 resolveTemplate("stateMachineId", machineName).
@@ -67,7 +67,7 @@ public class StatesResourceIT {
     public void reset() {
         final String expected = "indexpage";
         String machineName = initMachine();
-        triggerEvent(machineName, INITIAL_EVENT_NAME);
+        triggerEvent(machineName, INITIAL_EVENT_NAME, null);
 
         statesBuilder.target().
                 resolveTemplate("stateMachineId", machineName).
@@ -86,10 +86,10 @@ public class StatesResourceIT {
         assertThat(actual, is(expected));
     }
 
-    String triggerEvent(String key, String event) {
+    String triggerEvent(String key, String event, JsonObject conditions) {
         Response response = statesBuilder.target().resolveTemplate("stateMachineId", key).
                 request(MediaType.APPLICATION_JSON).
-                put(Entity.json(event(event)));
+                put(Entity.json(event(event, conditions)));
         assertThat(response.getStatusInfo().getFamily(), is(Response.Status.Family.SUCCESSFUL));
         JsonObject result = response.readEntity(JsonObject.class);
         System.out.println("result = " + result);
@@ -98,9 +98,15 @@ public class StatesResourceIT {
         return transition.keySet().iterator().next();
     }
 
-    public JsonObject event(String event) {
+    public JsonObject event(String event, JsonObject conditions) {
+        if (conditions == null) {
+            return Json.createObjectBuilder().
+                    add("event", event).
+                    build();
+        }
         return Json.createObjectBuilder().
                 add("event", event).
+                add("conditions", conditions).
                 build();
     }
 
