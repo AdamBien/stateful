@@ -9,6 +9,8 @@ import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
+import org.apache.commons.scxml2.Context;
 import org.apache.commons.scxml2.SCXMLExecutor;
 import org.apache.commons.scxml2.Status;
 import org.apache.commons.scxml2.TriggerEvent;
@@ -27,10 +29,14 @@ public class StateManager {
     @Inject
     DefinitionStore store;
 
-    public JsonObject trigger(String stateMachineId, String event) {
+    public JsonObject trigger(String stateMachineId, String event, JsonObject payload) {
         SCXMLExecutor executor = store.find(stateMachineId);
+        if (payload != null) {
+            passParameters(payload, executor.getRootContext());
+        }
         try {
             executor.triggerEvent(new TriggerEvent(event, TriggerEvent.SIGNAL_EVENT));
+            executor.getRootContext().reset();
         } catch (ModelException ex) {
             throw new IllegalStateException("Cannot trigger event: " + event + " with stm: " + stateMachineId, ex);
         }
@@ -48,6 +54,39 @@ public class StateManager {
         store.remove(stateMachineId);
         store.store(stateMachineId, executor);
         return status(stateMachineId);
+    }
+
+    void passParameters(JsonObject object, Context context) {
+        Set<String> keyNames = object.keySet();
+        for (String name : keyNames) {
+            JsonValue.ValueType type = object.get(name).getValueType();
+            switch (type) {
+                case STRING:
+                    context.set(name, object.getString(name));
+                    break;
+                case NUMBER:
+                    context.set(name, object.getJsonNumber(name).doubleValue());
+                    break;
+                case NULL:
+                    context.set(name, null);
+                    break;
+                case FALSE:
+                    context.set(name, false);
+                    break;
+                case TRUE:
+                    context.set(name, true);
+                    break;
+                case ARRAY:
+                    context.set(name, object.getJsonArray(name));
+                    break;
+                case OBJECT:
+                    context.set(name, object.getJsonObject(name));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown JSON value");
+            }
+        }
+
     }
 
     public JsonObject status(String stateMachineId) {

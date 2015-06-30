@@ -3,7 +3,8 @@
        initial="indexpage">
 
     <state id="indexpage">
-        <transition event="login"   target="authenticated"/>
+        <transition event="login" cond="user === 'valid'" target="authenticated"/>
+        <transition event="login" cond="user === 'hacker'" target="isolated"/>
     </state>
 
     <state id="authenticated">
@@ -16,6 +17,9 @@
     </state>
 
     <state id="unauthenticated">
+        <transition event="authenticate"   target="indexpage"/>
+    </state>
+    <state id="isolated">
         <transition event="authenticate"   target="indexpage"/>
     </state>
 </scxml>
