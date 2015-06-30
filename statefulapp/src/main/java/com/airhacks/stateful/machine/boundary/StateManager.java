@@ -51,7 +51,6 @@ public class StateManager {
             throw new IllegalStateException("Cannot reset executor with stm: " + stateMachineId, ex);
         }
         //TODO: woraround -- reset makes the StateMachine not Serializable
-        store.remove(stateMachineId);
         store.store(stateMachineId, executor);
         return status(stateMachineId);
     }
