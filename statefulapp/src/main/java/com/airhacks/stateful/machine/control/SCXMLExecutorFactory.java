@@ -3,7 +3,6 @@ package com.airhacks.stateful.machine.control;
 import com.airhacks.stateful.machine.entity.SerializableErrorReporter;
 import org.apache.commons.scxml2.SCInstance;
 import org.apache.commons.scxml2.SCXMLExecutor;
-import org.apache.commons.scxml2.env.javascript.JSContext;
 import org.apache.commons.scxml2.env.javascript.JSEvaluator;
 import org.apache.commons.scxml2.model.ModelException;
 import org.apache.commons.scxml2.model.SCXML;
@@ -15,16 +14,14 @@ import org.apache.commons.scxml2.model.SCXML;
 public class SCXMLExecutorFactory {
 
     public static SCXMLExecutor create(SCXML scxml) throws ModelException {
-        SCXMLExecutor executor = new SCXMLExecutor();
-        executor.setRootContext(new JSContext());
-        executor.setEvaluator(new JSEvaluator());
+        SCXMLExecutor executor = new SCXMLExecutor(new JSEvaluator(), null, null);
         executor.setStateMachine(scxml);
         executor.setErrorReporter(new SerializableErrorReporter());
         return executor;
     }
 
     public static SCXMLExecutor create(SCInstance state) throws ModelException {
-        SCXMLExecutor executor = new SCXMLExecutor();
+        SCXMLExecutor executor = new SCXMLExecutor(new JSEvaluator(), null, null);
         executor.attachInstance(state);
         executor.setErrorReporter(new SerializableErrorReporter());
         return executor;
