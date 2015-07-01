@@ -13,9 +13,8 @@ import org.apache.commons.scxml2.model.SCXML;
 public class SCXMLExecutorFactory {
 
     public static SCXMLExecutor create(SCXML scxml) throws ModelException {
-        SCXMLExecutor executor = new SCXMLExecutor(new CustomJSEvaluator(), null, null);
+        SCXMLExecutor executor = new SCXMLExecutor();
         executor.setStateMachine(scxml);
-        executor.setEvaluator(new CustomJSEvaluator());
         executor.setErrorReporter(new SerializableErrorReporter());
         return executor;
     }
