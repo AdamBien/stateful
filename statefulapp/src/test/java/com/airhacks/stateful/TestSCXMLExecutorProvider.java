@@ -14,7 +14,6 @@ public class TestSCXMLExecutorProvider {
     public static SCXMLExecutor create() throws Exception {
         SCXML scxml = SCXMLReader.read(TestSCXMLExecutorProvider.class.getResourceAsStream("/state.xml"));
         SCXMLExecutor executor = SCXMLExecutorFactory.create(scxml);
-        executor.setStateMachine(scxml);
         executor.go();
         return executor;
 
