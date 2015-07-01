@@ -1,9 +1,11 @@
 <scxml xmlns="http://www.w3.org/2005/07/scxml"
        version="1.0"
+       datamodel="ecmascript"
        initial="indexpage">
 
     <state id="indexpage">
-        <transition event="login"   target="authenticated"/>
+        <transition event="login" cond="print('1--------------------------' + user);user === 'hacker'" target="isolated"/>
+        <transition event="login" cond="print('2--------------------------' + user);user === 'valid'" target="authenticated"/>
     </state>
 
     <state id="authenticated">
@@ -18,5 +20,7 @@
     <state id="unauthenticated">
         <transition event="authenticate"   target="indexpage"/>
     </state>
-
+    <state id="isolated">
+        <transition event="authenticate"   target="indexpage"/>
+    </state>
 </scxml>

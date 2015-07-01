@@ -22,10 +22,10 @@ import org.junit.Test;
 public class StatesResourceIT {
 
     @Rule
-    public JAXRSClientProvider machinesBuilder = JAXRSClientProvider.buildWithURI("http://localhost:8080/statefulapp/resources/machines/");
+    public JAXRSClientProvider machinesBuilder = JAXRSClientProvider.buildWithURI("http://localhost:41725/statefulapp/resources/machines/");
 
     @Rule
-    public JAXRSClientProvider statesBuilder = JAXRSClientProvider.buildWithURI("http://localhost:8080/statefulapp/resources/machines/{stateMachineId}/states/");
+    public JAXRSClientProvider statesBuilder = JAXRSClientProvider.buildWithURI("http://localhost:41725/statefulapp/resources/machines/{stateMachineId}/states/");
 
     private static final String INITIAL_EVENT_NAME = "login";
 
