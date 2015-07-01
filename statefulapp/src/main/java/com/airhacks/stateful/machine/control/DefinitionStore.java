@@ -2,7 +2,6 @@ package com.airhacks.stateful.machine.control;
 
 import com.airhacks.stateful.machine.entity.StateMachine;
 import java.util.List;
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.commons.scxml2.SCInstance;
@@ -13,7 +12,6 @@ import org.apache.commons.scxml2.model.ModelException;
  *
  * @author airhacks.com
  */
-@Stateless
 public class DefinitionStore {
 
     @PersistenceContext
