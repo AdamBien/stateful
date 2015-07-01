@@ -17,8 +17,8 @@ public class DefinitionStore {
     @PersistenceContext
     EntityManager em;
 
-    public StateMachine store(String stateMachineId, SCXMLExecutor executor) {
-        return this.em.merge(new StateMachine(stateMachineId, executor.detachInstance()));
+    public void store(String stateMachineId, SCXMLExecutor executor) {
+        this.em.merge(new StateMachine(stateMachineId, executor.detachInstance()));
     }
 
     public SCXMLExecutor find(String stateMachineId) {

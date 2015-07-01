@@ -16,6 +16,7 @@ import org.apache.commons.scxml2.SCXMLExecutor;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -62,6 +63,7 @@ public class StateManagerTest {
     }
 
     //reproducer
+    @Ignore
     @Test
     public void triggerWithParametersWithDetachment() throws Exception {
         String stateMachineId = "test";
