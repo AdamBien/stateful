@@ -23,6 +23,9 @@ public class StateMachine {
     @Lob
     private SCInstance state;
 
+    @Lob
+    private byte[] attachment;
+
     protected StateMachine() {
     }
 
@@ -37,6 +40,14 @@ public class StateMachine {
 
     public SCInstance getState() {
         return state;
+    }
+
+    public byte[] getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(byte[] attachment) {
+        this.attachment = attachment;
     }
 
 }
