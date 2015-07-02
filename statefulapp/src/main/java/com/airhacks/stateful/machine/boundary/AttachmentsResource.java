@@ -37,8 +37,13 @@ public class AttachmentsResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response transition(@PathParam("stateMachineId") String stateMachineId, @Context UriInfo info, JsonObject attachment) {
-        attachmentManager.attach(stateMachineId, attachment);
-        URI uri = info.getAbsolutePathBuilder().path(stateMachineId).build();
+        boolean successfullyAttached = attachmentManager.attach(stateMachineId, attachment);
+        if (!successfullyAttached) {
+            return Response.status(Response.Status.BAD_REQUEST).
+                    header("info", "State machine with " + stateMachineId + " not found").
+                    build();
+        }
+        URI uri = info.getAbsolutePathBuilder().build();
         return Response.created(uri).build();
     }
 
