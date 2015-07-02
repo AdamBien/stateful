@@ -10,3 +10,7 @@ buildNumber.properties
 /statefulapp/derby.log
 /statefulapp/statefulDB/
 *.sh
+/stateful/statefulDB/
+/stateful/derby.log
+/stateful/nbproject/
+/statefulapp-st/nbactions.xml
