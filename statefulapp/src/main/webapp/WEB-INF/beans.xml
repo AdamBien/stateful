@@ -4,6 +4,6 @@
        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
        bean-discovery-mode="all">
     <alternatives>
-        <class>com.airhacks.stateful.machine.control.InMemoryDefinitionStore</class>
+        <class>com.airhacks.stateful.machine.control.InMemoryStateMachineStore</class>
     </alternatives>
 </beans>
