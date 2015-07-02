@@ -16,9 +16,9 @@ import org.junit.Test;
  *
  * @author airhacks.com
  */
-public class DefinitionStoreTest {
+public class StateMachineStoreTest {
 
-    DefinitionStore cut;
+    StateMachineStore cut;
 
     @Rule
     public EntityManagerProvider provider
@@ -27,7 +27,7 @@ public class DefinitionStoreTest {
 
     @Before
     public void init() {
-        this.cut = new DefinitionStore();
+        this.cut = new StateMachineStore();
         this.cut.em = provider.em();
         this.tx = provider.tx();
 

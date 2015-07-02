@@ -12,7 +12,7 @@ import org.apache.commons.scxml2.model.ModelException;
  *
  * @author airhacks.com
  */
-public class DefinitionStore {
+public class StateMachineStore {
 
     @PersistenceContext
     EntityManager em;
@@ -21,8 +21,12 @@ public class DefinitionStore {
         this.em.merge(new StateMachine(stateMachineId, executor.detachInstance()));
     }
 
+    public StateMachine findStateMachine(String stateMachineId) {
+        return this.em.find(StateMachine.class, stateMachineId);
+    }
+
     public SCXMLExecutor find(String stateMachineId) {
-        StateMachine machine = this.em.find(StateMachine.class, stateMachineId);
+        StateMachine machine = this.findStateMachine(stateMachineId);
         if (machine == null) {
             return null;
         }
