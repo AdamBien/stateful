@@ -1,6 +1,6 @@
 package com.airhacks.stateful.machine.boundary;
 
-import com.airhacks.stateful.machine.control.DefinitionStore;
+import com.airhacks.stateful.machine.control.StateMachineStore;
 import java.util.Set;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -27,7 +27,7 @@ import org.apache.commons.scxml2.model.Transition;
 public class StateManager {
 
     @Inject
-    DefinitionStore store;
+    StateMachineStore store;
 
     public JsonObject trigger(String stateMachineId, String event, JsonObject payload) {
         SCXMLExecutor executor = store.find(stateMachineId);

@@ -17,7 +17,7 @@ import org.apache.commons.scxml2.SCXMLExecutor;
 @Alternative
 @Singleton
 @Specializes
-public class InMemoryDefinitionStore extends DefinitionStore {
+public class InMemoryDefinitionStore extends StateMachineStore {
 
     private ConcurrentMap<String, SCXMLExecutor> stateMachines;
 

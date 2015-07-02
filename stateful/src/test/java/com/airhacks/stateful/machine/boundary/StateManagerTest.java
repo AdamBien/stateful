@@ -1,7 +1,7 @@
 package com.airhacks.stateful.machine.boundary;
 
 import com.airhacks.stateful.TestSCXMLExecutorProvider;
-import com.airhacks.stateful.machine.control.DefinitionStore;
+import com.airhacks.stateful.machine.control.StateMachineStore;
 import com.airhacks.stateful.machine.control.SCXMLExecutorFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,11 +28,11 @@ import static org.mockito.Mockito.when;
 public class StateManagerTest {
 
     private StateManager cut;
-    private DefinitionStore ds;
+    private StateMachineStore ds;
 
     @Before
     public void init() {
-        this.ds = mock(DefinitionStore.class);
+        this.ds = mock(StateMachineStore.class);
         this.cut = new StateManager();
         this.cut.store = this.ds;
     }

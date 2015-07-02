@@ -1,6 +1,6 @@
 package com.airhacks.stateful.machine.boundary;
 
-import com.airhacks.stateful.machine.control.DefinitionStore;
+import com.airhacks.stateful.machine.control.StateMachineStore;
 import com.airhacks.stateful.machine.control.SCXMLExecutorFactory;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +25,7 @@ import org.apache.commons.scxml2.model.SCXML;
 public class StateMachinesManager {
 
     @Inject
-    DefinitionStore ds;
+    StateMachineStore ds;
 
     public String create(String stateMachineId, InputStream stream) {
         SCXMLExecutor executor = createAndStart(stateMachineId, stream);
