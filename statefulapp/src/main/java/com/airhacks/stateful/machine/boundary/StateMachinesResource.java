@@ -32,12 +32,15 @@ public class StateMachinesResource {
     @Inject
     StateManager sm;
 
+    @Inject
+    AttachmentManager am;
+
     @Context
     ResourceContext rc;
 
     @Path("{stateMachineId}")
     public StateMachineResource stateMachine() {
-        return rc.initResource(new StateMachineResource(dm, sm));
+        return rc.initResource(new StateMachineResource(dm, sm, am));
     }
 
     /**

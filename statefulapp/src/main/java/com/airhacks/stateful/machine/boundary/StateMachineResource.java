@@ -22,15 +22,17 @@ import javax.ws.rs.core.UriInfo;
  */
 public class StateMachineResource {
 
+    AttachmentManager am;
     StateMachinesManager dm;
     StateManager sm;
 
     @Context
     ResourceContext rc;
 
-    public StateMachineResource(StateMachinesManager dm, StateManager sm) {
+    public StateMachineResource(StateMachinesManager dm, StateManager sm, AttachmentManager am) {
         this.dm = dm;
         this.sm = sm;
+        this.am = am;
     }
 
     /**
@@ -84,6 +86,11 @@ public class StateMachineResource {
     @Path("states")
     public StatesResource states() {
         return this.rc.initResource(new StatesResource(this.sm));
+    }
+
+    @Path("attachments")
+    public AttachmentsResource attachments() {
+        return this.rc.initResource(new AttachmentsResource(this.am));
     }
 
 }
