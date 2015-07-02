@@ -1,8 +1,8 @@
 package com.airhacks.stateful.machine.boundary;
 
 import com.airhacks.stateful.TestSCXMLExecutorProvider;
-import com.airhacks.stateful.machine.control.StateMachineStore;
 import com.airhacks.stateful.machine.control.SCXMLExecutorFactory;
+import com.airhacks.stateful.machine.control.StateMachineStore;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
