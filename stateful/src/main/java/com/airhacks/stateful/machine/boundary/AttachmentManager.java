@@ -20,17 +20,21 @@ public class AttachmentManager {
     @Inject
     StateMachineStore sms;
 
-    public void attach(String stateMachineId, JsonObject attachment) {
+    public boolean attach(String stateMachineId, JsonObject attachment) {
         StateMachine machine = sms.findStateMachine(stateMachineId);
+        if (machine == null) {
+            return false;
+        }
         try {
             byte[] serialized = serialize(attachment);
             machine.setAttachment(serialized);
         } catch (IOException ex) {
             throw new IllegalStateException("Cannot serialize attachment", ex);
         }
+        return true;
     }
 
-    public JsonObject attachment(String stateMachineId) {
+    public JsonObject getAttachment(String stateMachineId) {
         StateMachine stateMachine = sms.findStateMachine(stateMachineId);
         if (stateMachine == null) {
             return null;
@@ -55,16 +59,17 @@ public class AttachmentManager {
     }
 
     JsonObject deserialize(byte[] content) throws IOException {
-        try (ByteArrayInputStream bais = new ByteArrayInputStream(content)) {
-            JsonReader reader = Json.createReader(bais);
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(content);
+                JsonReader reader = Json.createReader(bais)) {
             return reader.readObject();
         }
     }
 
     byte[] serialize(JsonObject object) throws IOException {
-        try (ByteArrayOutputStream oos = new ByteArrayOutputStream()) {
-            JsonWriter writer = Json.createWriter(oos);
+        try (ByteArrayOutputStream oos = new ByteArrayOutputStream(); JsonWriter writer = Json.createWriter(oos)) {
             writer.writeObject(object);
+            writer.close();
+            oos.flush();
             return oos.toByteArray();
         }
     }

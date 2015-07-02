@@ -16,9 +16,9 @@ import org.junit.Test;
  *
  * @author airhacks.com
  */
-public class StateMachineStoreTest {
+public class JPAStateMachineStoreTest {
 
-    StateMachineStore cut;
+    JPAStateMachineStore cut;
 
     @Rule
     public EntityManagerProvider provider
@@ -27,7 +27,7 @@ public class StateMachineStoreTest {
 
     @Before
     public void init() {
-        this.cut = new StateMachineStore();
+        this.cut = new JPAStateMachineStore();
         this.cut.em = provider.em();
         this.tx = provider.tx();
 
