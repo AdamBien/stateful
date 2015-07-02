@@ -41,7 +41,7 @@
             <plugin>
                 <groupId>com.sebastian-daschner</groupId>
                 <artifactId>jaxrs-analyzer-maven-plugin</artifactId>
-                <version>0.3</version>
+                <version>0.5</version>
                 <executions>
                     <execution>
                         <goals>
@@ -49,6 +49,7 @@
                         </goals>
                         <configuration>
                             <backend>swagger</backend>
+                            <deployedDomain>localhost:8080/statefulapp</deployedDomain>
                         </configuration>
                     </execution>
                 </executions>
