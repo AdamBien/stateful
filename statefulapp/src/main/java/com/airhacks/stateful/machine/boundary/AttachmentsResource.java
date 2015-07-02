@@ -56,12 +56,15 @@ public class AttachmentsResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response status(@PathParam("stateMachineId") String stateMachineId) {
-        JsonObject attachment = attachmentManager.attachment(stateMachineId);
+        JsonObject attachment = attachmentManager.getAttachment(stateMachineId);
+        if (attachment == null) {
+            return Response.noContent().build();
+        }
         return Response.ok(attachment).build();
     }
 
     /**
-     * Removes the attachment
+     * Removes the getAttachment
      *
      * @param stateMachineId name of the state machine
      * @return Http Status code 204
