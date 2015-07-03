@@ -60,7 +60,7 @@ Content-Type: application/xml
 ```
 
 ```xml
-<?xml version=‘1.0’ encoding=‘UTF-8’?><scxml xmlns=“http://www.w3.org/2005/07/scxml” xmlns:cs=“http://commons.apache.org/scxml” version=“1.0” initial=“index page”><!—http://commons.apache.org/scxml--><state id=“index page”><transition event=“login” target=“authenticated”/></state><state id=“authenticated”><transition event=“browse” target=“browsing”/><transition event=“logout” target=“unauthenticated”/></state><state id=“browsing”><transition event=“logout” target=“unauthenticated”/></state><state id=“unauthenticated”><transition event=“authenticate” target=“index page”/></state></scxml>
+<?xml version=‘1.0' encoding=‘UTF-8'?><scxml xmlns="http://www.w3.org/2005/07/scxml" xmlns:cs="http://commons.apache.org/scxml" version="1.0" initial="index page"><!—http://commons.apache.org/scxml--><state id="index page"><transition event="login" target="authenticated"/></state><state id="authenticated"><transition event="browse" target="browsing"/><transition event="logout" target="unauthenticated"/></state><state id="browsing"><transition event="logout" target="unauthenticated"/></state><state id="unauthenticated"><transition event="authenticate" target="index page"/></state></scxml>
 ```
 ## list all installed state machine names
 ```
@@ -73,7 +73,7 @@ Content-Type: application/json
 ```
 
 ```json
-[“duke”]
+["duke"]
 ```
 
 ## retrieve the current event and next transitions
@@ -89,11 +89,48 @@ Content-Type: application/json
 (…)
 ```
 ```json
-{“current-state”:[“index page”],”next-transitions”:[{“login”:[“authenticated”]}]}
+{"current-state":["index page"],"next-transitions":[{"login":["authenticated"]}]}
 ```
+## retrieve attachments associated with the state machine
+
+```
+curl -i  http://localhost:8080/statefulapp/resources/machines/duke/attachments
+```
+Response:
+
+```
+HTTP/1.1 204 No Content
+
+```
+
+## add an attachment
+
+```
+curl -i -XPUT -H'Content-type: application/json' -d'{"answer":42}'  http://localhost:8080/statefulapp/resources/machines/duke/attachments
+```
+Response:
+
+```
+HTTP/1.1 201 Created
+(...)
+Location: http://localhost:8080/statefulapp/resources/machines/duke/attachments
+```
+
+## delete an attachment
+
+```
+curl -i -XDELETE http://localhost:8080/statefulapp/resources/machines/duke/attachments
+```
+
+Response:
+
+```
+HTTP/1.1 204 No Content
+```
+
 ## trigger a transition
 ```
-curl -i -XPUT -H’Content-type: application/json’ -d’{“event”:”login”}’ http://localhost:8080/statefulapp/resources/machines/duke/states
+curl -i -XPUT -H'Content-type: application/json' -d'{"event":"login"}' http://localhost:8080/statefulapp/resources/machines/duke/states
 ```
 Response:
 ```
@@ -103,7 +140,7 @@ Content-Type: application/json
 ```
 
 ```json
-{“current-state”:[“authenticated”],”next-transitions”:[{“browse”:[“browsing”],”logout”:[“unauthenticated”]}]}
+{"current-state":["authenticated"],"next-transitions":[{"browse":["browsing"],"logout":["unauthenticated"]}]}
 ```
 ## reset state machine
 ```
@@ -115,8 +152,8 @@ HTTP/1.1 200 OK
 ```
 
 ```json
-{“current-state”:[“index page”],
-”next-transitions”:[{“login”:[“authenticated”]}]}
+{"current-state":["index page"],
+"next-transitions":[{"login":["authenticated"]}]}
 ```
 
 ## destroy a state machine
