@@ -6,31 +6,37 @@ A RESTful statemachine using the [scxml w3c](http://www.w3.org/TR/scxml/) for co
 Drop the statefulapp.war into a Java EE 7 application server on Java 8 (tested on WildFly, GlassFish, Payara)
 
 # usage
-## create a state machine from SXML file
+## create a state machine from SCXML file
 ```
-curl -i -H”Content-type: application/xml” -XPUT —data-binary @“src/test/resources/state.xml” http://localhost:8080/statefulapp/resources/machines/duke
+curl -i -H"Content-type: application/xml" -XPUT --data-binary @"src/test/resources/state.xml" http://localhost:8080/statefulapp/resources/machines/duke
+
 ```
 Sample file:
 ```xml
-<scxml xmlns=“http://www.w3.org/2005/07/scxml”
-       version=“1.0”
-       initial=“indexpage”>
+<scxml xmlns="http://www.w3.org/2005/07/scxml"
+       version="1.0"
+       datamodel="ecmascript"
+       initial="indexpage">
 
-    <state id=“indexpage”>
-        <transition event=“login”   target=“authenticated”/>
+    <state id="indexpage">
+        <transition event="login" cond="user === 'hacker'" target="isolated"/>
+        <transition event="login" cond="user === 'valid'" target="authenticated"/>
     </state>
 
-    <state id=“authenticated”>
-        <transition event=“browse”   target=“browsing”/>
-        <transition event=“logout”    target=“unauthenticated”/>
+    <state id="authenticated">
+        <transition event="browse"   target="browsing"/>
+        <transition event="logout"    target="unauthenticated"/>
     </state>
 
-    <state id=“browsing”>
-        <transition event=“logout” target=“unauthenticated”/>
+    <state id="browsing">
+        <transition event="logout" target="unauthenticated"/>
     </state>
 
-    <state id=“unauthenticated”>
-        <transition event=“authenticate”   target=“index page”/>
+    <state id="unauthenticated">
+        <transition event="authenticate"   target="indexpage"/>
+    </state>
+    <state id="isolated">
+        <transition event="authenticate"   target="indexpage"/>
     </state>
 </scxml>
 ```
@@ -58,7 +64,7 @@ Content-Type: application/xml
 ```
 ## list all installed state machine names
 ```
-curl http://localhost:8080/statefulapp/resources/machines/ 
+curl http://localhost:8080/statefulapp/resources/machines/
 ```
 Response:
 ```
@@ -73,7 +79,7 @@ Content-Type: application/json
 ## retrieve the current event and next transitions
 
 ```
-curl http://localhost:8080/statefulapp/resources/machines/duke/states 
+curl http://localhost:8080/statefulapp/resources/machines/duke/states
 ```
 Response:
 
