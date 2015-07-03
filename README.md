@@ -142,6 +142,24 @@ Content-Type: application/json
 ```json
 {"current-state":["authenticated"],"next-transitions":[{"browse":["browsing"],"logout":["unauthenticated"]}]}
 ```
+
+## trigger a transition with condition
+
+```
+curl -i -XPUT -H'Content-type: application/json' -d'{"event":"login","conditions":{"user":"hacker"}}' http://localhost:8080/statefulapp/resources/machines/duke/states
+```
+Response:
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+(…)
+```
+
+```json
+{"current-state":["isolated"],"next-transitions":[{"authenticate":["indexpage"]}]}
+```
+
+
 ## reset state machine
 ```
 curl -i -XDELETE http://localhost:8080/statefulapp/resources/machines/duke/states
