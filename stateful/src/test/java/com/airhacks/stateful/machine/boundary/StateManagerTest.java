@@ -16,7 +16,6 @@ import org.apache.commons.scxml2.SCXMLExecutor;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -62,8 +61,6 @@ public class StateManagerTest {
         assertThat(hackerState, is("isolated"));
     }
 
-    //reproducer
-    @Ignore
     @Test
     public void triggerWithParametersWithDetachment() throws Exception {
         String stateMachineId = "test";
@@ -77,7 +74,8 @@ public class StateManagerTest {
         String event = "login";
         JsonObject result = this.cut.trigger(stateMachineId, event, condition);
         //serialization after state change fails
-        reserialize(reserialized);
+        SCInstance detachedInstance = copy.detachInstance();
+        reserialize(detachedInstance);
         System.out.println("result = " + result);
         JsonArray results = result.getJsonArray("current-state");
         String hackerState = results.getString(0);
